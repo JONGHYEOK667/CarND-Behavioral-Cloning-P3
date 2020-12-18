@@ -39,6 +39,8 @@ My project includes the following files:
 * model.h5 containing a trained convolution neural network 
 * writeup_report.md or writeup_report.pdf summarizing the results
 
+And, here is a link to my [Jonghyeok's project notebook](https://github.com/JONGHYEOK667/Udacity_SelfDrivingCar_P4/blob/main/SDC_P4.ipynb), [Jonghyeok's project python code](https://github.com/JONGHYEOK667/Udacity_SelfDrivingCar_P4/blob/main/model.py)
+
 #### 2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
 ```sh
@@ -50,7 +52,6 @@ python drive.py model.h5
 The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
 ### Model Architecture and Training Strategy  
-
 
 #### 0. Architecture layer
 | Layer         		|     Description	        					| 
