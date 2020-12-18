@@ -77,9 +77,13 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
+My model was transformed based on the model by Nvidia.  [Reference](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf)   
 
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+In the pre-processing part, define the ROI area using the cropping layer. And, image array is normalized through the lambda layer   
+
+In the feature extraction part, five convolution layers using relu activation is connected sequentially.  
+
+Finally, in the regression part, the steering value is finally predicted using 4 fully cennected layers.  
 
 #### 2. Attempts to reduce overfitting in the model
 
