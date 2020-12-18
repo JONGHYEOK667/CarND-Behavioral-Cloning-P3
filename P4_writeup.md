@@ -87,13 +87,11 @@ Finally, in the regression part, the steering value is finally predicted using 4
 
 #### 2. Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+To prevent overfitting, two dropout layers is applied fully connected laryers and one convolution layers.   
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
-
-#### 3. Model parameter tuning
-
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+Then, adjust the drop rate manually by monitoring trend of loss and val_loss.
+ 
+Finally, Use Early stopping callback `(patience = 5,monitor='val_loss',mode = 'min')` 
 
 #### 4. Appropriate training data
 
