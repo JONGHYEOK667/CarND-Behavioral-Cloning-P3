@@ -18,13 +18,12 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
+[image1]: ./output_fig/1.collected_data.jpg "1.collected_data"
+[image2]: ./examples/2.Augmented_Image(Centering).jpg "Centering"
+[image3]: ./examples/2.Augmented_Image(BiasedRecover).jpg "2.Augmented_Image(BiasedRecover)"
+[image4]: ./examples/2.Augmented_Image(EdgeRecover).jpg "2.Augmented_Image(EdgeRecover)"
+[image5]: ./examples/3.Augmented_data.jpg "3.Augmented_data"
+[image6]: ./examples/4.Train_History.jpg "4.Train_History"
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -50,7 +49,31 @@ python drive.py model.h5
 
 The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
-### Model Architecture and Training Strategy
+### Model Architecture and Training Strategy  
+
+
+#### 0 Architecture layer
+| Layer         		|     Description	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| cropping         		| up = 70, down = 25, left = 0, right = 0, outputs 65x320x3 							| 
+| lambda     	| x: x/255-0.5 (Nomalize),  outputs 65x320x3 |
+| Convolution 	      	| 24 filters, 5x5 kernel, 2x2 stride, RELU activation, outputs 33x160x24|
+| Convolution      	| 36 filters, 5x5 kernel, 2x2 stride, RELU activation, outputs 17x80x36|
+| Convolution	      	|48 filters, 5x5 kernel, 2x2 stride, RELU activation, outputs 9x40x48|
+| Convolution      	| 64 filters, 3x3 kernel, 1x1 stride, RELU activation, outputs 9x40x64|
+| Drop out      	| rate = 0.2,  outputs 9x40x64 				|
+| Convolution      	| 64 filters, 3x3 kernel, 1x1 stride, RELU activation, outputs 9x40x64|
+| Flatten    	| outputs 23040|
+| Fully connected	      	| outputs 100 				|
+| Drop out      	| rate = 0.4 				|
+| Fully connected     	| outputs 50 				|
+| Drop out		| rate = 0.4      									|
+| Fully connected		| outputs 10      									|
+| Fully connected		| outputs 1      									|
+|:---------------------:|:---------------------------------------------:| 
+|	Total parameters					|					2,441,019							|
+|			Trainable parameters					|						2,441,019									|
+
 
 #### 1. An appropriate model architecture has been employed
 
