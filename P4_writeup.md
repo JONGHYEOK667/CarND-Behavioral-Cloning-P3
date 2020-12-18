@@ -19,11 +19,11 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [image1]: ./output_fig/1.collected_data.jpg "1.collected_data"
-[image2]: ./examples/2.Augmented_Image(Centering).jpg "Centering"
-[image3]: ./examples/2.Augmented_Image(BiasedRecover).jpg "2.Augmented_Image(BiasedRecover)"
-[image4]: ./examples/2.Augmented_Image(EdgeRecover).jpg "2.Augmented_Image(EdgeRecover)"
-[image5]: ./examples/3.Augmented_data.jpg "3.Augmented_data"
-[image6]: ./examples/4.Train_History.jpg "4.Train_History"
+[image2]: ./output_fig/2.Augmented_Image(Centering).jpg "Centering"
+[image3]: ./output_fig/2.Augmented_Image(BiasedRecover).jpg "2.Augmented_Image(BiasedRecover)"
+[image4]: ./output_fig/2.Augmented_Image(EdgeRecover).jpg "2.Augmented_Image(EdgeRecover)"
+[image5]: ./output_fig/3.Augmented_data.jpg "3.Augmented_data"
+[image6]: ./output_fig/4.Train_History.jpg "4.Train_History"
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
