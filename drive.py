@@ -13,11 +13,6 @@ from flask import Flask
 from io import BytesIO
 import tensorflow as tf
 
-gpu = tf.config.experimental.list_physical_devices('GPU') # 내 컴에 장착된 GPU를 list로 반환
-try:
-    tf.config.experimental.set_memory_growth(gpu[0], True) # GPU Memory Growth를 Enable
-except RuntimeError as e:
-    print(e) # Error 발생하면 Error 내용 출력
     
   
 from tensorflow.keras.models import load_model
