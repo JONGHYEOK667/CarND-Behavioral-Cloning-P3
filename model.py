@@ -9,9 +9,11 @@
 # In[1]: Setting GPU w/ Tensorflow running
 
 
-import os
 import tensorflow as tf
 print(tf.__version__)
+
+import keras
+print(keras.__version__)
 gpus = tf.config.experimental.list_physical_devices('GPU')
 if gpus:
   try:
@@ -23,10 +25,12 @@ if gpus:
   except RuntimeError as e:
     # Memory rowth must be set before GPUs have been initialized
     print(e)
-
     
+# config = tf.ConfigProto()
+# config.gpu_option.per_process_gpu_memory_fraction = 0.4
+# session = tf.Session(config=config)
+# session.close()
 
-    
 # In[2]: Import modules
 
 
@@ -41,16 +45,14 @@ import seaborn as sns
 
 
 
-
-
-
 # In[3]: Load Data (Camera image and steering angle value)
+
 
 
 lines = []
 center_img, left_img, right_img, steer_val = [],[],[],[]
 
-path = '0.driving_data/driving_log.csv'  ## data log file path need!!!
+path = '0.driving_data/driving_log.csv' ## data path need
 
 with open(path) as csvfile:
     reader = csv.reader(csvfile)
@@ -68,18 +70,18 @@ with open(path) as csvfile:
                 left_img.append(line[1])
                 right_img.append(line[2])
                 steer_val.append(float(line[3]))
-
-                
+            
+            
 
             
 # In[4]: plot histogram for steering value on logging data (option)
-
-
+            
+            
 f = plt.hist(steer_val, bins = 40, edgecolor='black', linewidth = 1.2)
 plt.title('Collected data', fontsize = 10)
 plt.xlabel('Steering value (scaled)')
 plt.ylabel('counts')
-plt.savefig('output_fig/1.collected_data.jpg')
+# plt.savefig('output_fig/1.collected_data.jpg')
 
 steer_val = np.array(steer_val)
 steer_val = np.around(steer_val,3)
@@ -90,20 +92,23 @@ steer_val = np.around(steer_val,3)
 # In[5]: helper function for this project
 
 
+
 def BGR2RGB(img):
     img_RGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     return img_RGB
+
 
 def extract_array(img_path):
     images = []
     for line in img_path:
         source_path = line
         filename = source_path.split('\\')[-1]
-        current_path = '0.driving_data/IMG/' + filename
+        current_path = '0.driving_data/IMG/' + filename ## IMG path need!!
         image = cv2.imread(current_path)
         image = BGR2RGB(image)
         images.append(image)
     return images
+
 
 
 def Flip(imgs):
@@ -115,11 +120,13 @@ def Flip(imgs):
     return images
 
 
-  
-  
+
+
 # In[6]: Extract Image array data and callibration steering value 
 #        depends on each camera (left / center / right)
 
+
+## make left / center / right img, steer data
 
 offset = 0.1
 
@@ -131,8 +138,6 @@ steers_center = steer_val
 
 images_right = extract_array(right_img)
 steers_right = steer_val - offset
-
-
 
 
 # In[7]: Flip image and steering value for augment input data
@@ -148,7 +153,6 @@ steers_center_flip = -steers_center
 
 images_right_flip = Flip(images_right)
 steers_right_flip = -steers_right
-
 
 
 # In[8]: select images and  steering value for figure (option)
@@ -181,24 +185,23 @@ steer_right_flip = steers_right_flip[index]
 
 f, ((ax1,ax2,ax3),(ax4,ax5,ax6)) = plt.subplots(2, 3, figsize=(15, 10))
 ax1.imshow(image_left)
-ax1.set_title('left, '+'steer('+str(steer_left)+')', fontsize=20)
+ax1.set_title('left, '+'steer('+str(np.around(steer_left,3))+')', fontsize=20)
 ax2.imshow(image_center)
-ax2.set_title('center, '+'steer('+str(steer_center)+')', fontsize=20)
+ax2.set_title('center, '+'steer('+str(np.around(steer_center,3))+')', fontsize=20)
 ax3.imshow(image_right)
-ax3.set_title('right, '+'steer('+str(steer_right)+')', fontsize=20)
+ax3.set_title('right, '+'steer('+str(np.around(steer_right,3))+')', fontsize=20)
 ax4.imshow(image_left_flip)
-ax4.set_title('left_flip, '+'steer('+str(steer_left_flip)+')', fontsize=20)
+ax4.set_title('left_flip, '+'steer('+str(np.around(steer_left_flip,3))+')', fontsize=20)
 ax5.imshow(image_center_flip)
-ax5.set_title('center_flip, '+'steer('+str(steer_center_flip)+')', fontsize=20)
+ax5.set_title('center_flip, '+'steer('+str(np.around(steer_center_flip,3))+')', fontsize=20)
 ax6.imshow(image_right_flip)
-ax6.set_title('right_flip, '+'steer('+str(steer_right_flip)+')', fontsize=20)
+ax6.set_title('right_flip, '+'steer('+str(np.around(steer_right_flip,3))+')', fontsize=20)
 
 f.tight_layout()
 f.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.0)
-f.savefig('output_fig/2.Augmented_Image(SideCam_Flip).jpg')
+# f.savefig('output_fig/2.Augmented_Image(BiasedRecover).jpg')
 
 
-  
 
 # In[10]: Make input data (image array) and label (steering value)
 
@@ -212,17 +215,10 @@ steers = np.append(steers,steers_left_flip)
 steers = np.append(steers,steers_center_flip)
 steers = np.append(steers,steers_right_flip)
 
+# images =  images_center +  images_center_flip 
+# images = np.array(images)
 
-
-
-# In[11]: shffle data
-
-
-index = np.random.choice(steers.shape[0], int(steers.shape[0]/1), replace = False)
-x_train = images[index]
-y_train = steers[index]
-
-
+# steers = np.append(steers_center,steers_center_flip)
 
 
 # In[11]: plot histogram for all steering value  (option)
@@ -232,12 +228,52 @@ f = plt.hist(steers, bins = 40, edgecolor='black', linewidth = 1.2)
 plt.title('Augmented data', fontsize = 10)
 plt.xlabel('Steering value (scaled)')
 plt.ylabel('counts')
-plt.savefig('output_fig/3.Augmented_data.jpg')
+# plt.savefig('output_fig/3.Augmented_data.jpg')
+
+
+# In[12]: shffle data
+
+
+index = np.random.choice(steers.shape[0], int(steers.shape[0]/1), replace = False)
+x_suffle = images[index]
+y_suffle = steers[index]
+
+
+# In[13]: split train / valid data
+
+
+x_train = x_suffle[0:int(7*steers.shape[0]/10)]
+y_train = y_suffle[0:int(7*steers.shape[0]/10)]
+
+x_val = x_suffle[int(7*steers.shape[0]/10):]
+y_val = y_suffle[int(7*steers.shape[0]/10):]
 
 
 
 
-# In[12]: stack CNN model
+# In[14]: define generator
+
+
+def generator(feature, label, batch_size = 32):
+    num_sample = feature.shape[0]
+    while 1 :
+        for offset in range(0, num_sample, batch_size):
+            x_train = feature[offset:offset+batch_size]
+            y_train = label[offset:offset+batch_size]
+
+            yield (x_train, y_train)     
+    
+
+
+# In[15]: setting generator parameter and input
+
+
+batch_size = 256
+train_generator = generator(x_train, y_train, batch_size = batch_size)
+val_generator = generator(x_val, y_val, batch_size = batch_size)
+
+
+# In[16]:stack CNN model
 
 
 from tensorflow.keras.models import Sequential
@@ -261,9 +297,9 @@ model = keras.models.Sequential([
     keras.layers.Activation('relu'),
     keras.layers.Flatten(),
     keras.layers.Dense(100, activation = 'relu'),
-    keras.layers.Dropout(rate=drop_rate),
+    keras.layers.Dropout(rate=0.4),
     keras.layers.Dense(50, activation = 'relu'),
-    keras.layers.Dropout(rate=drop_rate),
+    keras.layers.Dropout(rate=0.4),
     keras.layers.Dense(10, activation = 'relu'),
     keras.layers.Dense(1)
 ])
@@ -274,18 +310,29 @@ model.compile(optimizer = keras.optimizers.Adam(),
              loss = 'mse', metrics = ['mae'])
 
 
+# In[17]:
+
+
+from math import ceil
+
+steps_per_epoch = ceil(x_train.shape[0]/batch_size)
+validation_steps = ceil(x_val.shape[0]/batch_size)
 
 
 
-# In[13]: Fit model
+# In[18]:Fit model
 
 
-history = model.fit(x_train, y_train, epochs = 100, batch_size = 256,
-                    callbacks = [keras.callbacks.EarlyStopping(patience=5,monitor='val_loss',mode = 'min',verbose = 1 )],
-                    validation_split = 0.3 , verbose = 1, shuffle = True  )
+history = model.fit_generator(train_generator, 
+                              steps_per_epoch = steps_per_epoch,
+                              validation_data = val_generator,
+                              validation_steps = validation_steps,
+                              epochs = 100,
+                              callbacks = [keras.callbacks.EarlyStopping(patience=5,monitor='val_loss',mode = 'min',verbose = 1 )],
+                              verbose = 1)
 
 
-# In[14]: plot history for training CNN network  (option)
+# In[19]:plot history for training CNN network  (option)
 
 
 history.history
@@ -300,13 +347,10 @@ ax2.set_title('mae', fontsize=20)
 ax2.set_xlabel('Epoch')
 f.tight_layout()
 f.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
-f.savefig('output_fig/4.Train_History.jpg')
+# f.savefig('output_fig/4.Train_History.jpg')
 
 
-
-
-
-# In[15]: save trained model
+# In[20]:save trained model
 
 
 model.save('model_temp.h5')
