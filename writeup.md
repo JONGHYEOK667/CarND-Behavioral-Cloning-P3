@@ -131,9 +131,10 @@ Therefore, the labels of all train data have the following distribution.
 
 
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting.  
-I finally randomly shuffled the data set and put 30% of the data into a validation set. 
-And, since there was no limit to the memory in my local machine, the generator was not used.   
-However, through this project, I was able to find out in which case the generator is used.
+I randomly shuffled the data set and put 30% of the data into a validation set. 
+I made a generator for save memory of the machine
+I choose the 'Adam' as optimizer of the network. because, Adam can adapt the moment and step size. also it is most prefered algorithm. 
+
 
 Finally, the training history is as follows (solid line : loss(mse) / mae,  dashed line : val_loss(val_mse) / val_mae)
 
